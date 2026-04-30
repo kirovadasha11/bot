@@ -1,9 +1,15 @@
+from flask import Flask
 import os
 from google import genai
 
-client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
+app = Flask(__name__)
 
-models = client.models.list()
+@app.route("/")
+def home():
+    client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
 
-for m in models:
-    print(m.name)
+    models = client.models.list()
+    return "<br>".join([m.name for m in models])
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=10000)
